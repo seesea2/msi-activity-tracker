@@ -3,8 +3,8 @@ import login from "../views/Login.vue";
 
 const routes = [
   {
-    path: "/",
-    name: "Login",
+    path: '/',
+    name: "Home",
     component: login,
   },
   {
@@ -36,7 +36,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
+  routes: routes,
 });
 
 export default router;

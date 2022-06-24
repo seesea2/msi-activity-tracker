@@ -10,8 +10,10 @@ It is set up using NodeJS + typescript in folder 'server'.
 
 ```
 npm install
+change directory to client, execute: npm install
+npm run build
 change directory to server, execute: npm install
-npm start
+npm run build
 ```
 
 ## Project Development Setup
@@ -35,11 +37,9 @@ visit website according to command line output, e.g. http://localhost:8081
 npm run build
 ```
 
-<!-- ### Lints and fixes files
-```
-npm run lint
-``` -->
 
 ### send email feature
 
+```
 need to configure smtp info in file: ./server/src/cfg.js
+```

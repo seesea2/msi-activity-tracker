@@ -4,7 +4,8 @@
   "license": "ISC",
   "scripts": {
     "serve": "nodemon",
-    "build": "tsc --build --clean && tsc --build --verbose"
+    "build": "tsc --build --clean && tsc --build --verbose",
+    "start": "node ./dist/server.js"
   },
   "author": "yc",
   "dependencies": {
