@@ -27,11 +27,11 @@
           <div v-if="props.activity.type != 'Template'">
             <div class="card-text small">
               <b>Start:</b>
-              {{ new Date(props.activity.startDatetime).toLocaleString() }}
+              {{ new Date(props.activity.startDateTime).toLocaleString() }}
             </div>
             <div class="card-text small">
               <b>End:</b>
-              {{ new Date(props.activity.endDatetime).toLocaleString() }}
+              {{ new Date(props.activity.endDateTime).toLocaleString() }}
             </div>
           </div>
           <div class="card-text mt-1 small">

@@ -107,8 +107,8 @@ function handleDateClick(arg) {
   for (let key in data.curActivity) {
     data.curActivity[key] = null;
   }
-  data.curActivity.startDatetime = new Date(actualDate);
-  data.curActivity.endDatetime = new Date(actualDate);
+  data.curActivity.startDateTime = new Date(actualDate);
+  data.curActivity.endDateTime = new Date(actualDate);
   // console.log("in handleDateClick data.curActivity:", data.curActivity);
 
   toggleModal("editActivityModal");
@@ -127,8 +127,8 @@ function refreshFullCalendar() {
     data.calendarOptions.events.push({
       id: activity.id,
       title: activity.title,
-      start: dateToLocaleStr(new Date(activity.startDatetime)),
-      end: dateToLocaleStr(new Date(activity.endDatetime)),
+      start: dateToLocaleStr(new Date(activity.startDateTime)),
+      end: dateToLocaleStr(new Date(activity.endDateTime)),
       backgroundColor: activity.type == "Issue" ? "yellow" : "green",
       textColor: activity.type == "Issue" ? "black" : "auto",
     });
@@ -160,7 +160,7 @@ function catchEdit(newAct) {
     data.activities.push(newCopy);
     // data.activities.push(newAct)
     data.activities.sort(function (a, b) {
-      return new Date(b.startDatetime) - new Date(a.startDatetime);
+      return new Date(b.startDateTime) - new Date(a.startDateTime);
     });
   }
   // console.log("catchedit, ", data.activities);

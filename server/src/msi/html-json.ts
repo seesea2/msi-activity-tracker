@@ -13,7 +13,7 @@ function createHtmlJson(tag: string) {
 
   try {
     tag = tag.toLowerCase();
-    let elm: HtmlJson = {
+    const elm: HtmlJson = {
       tag: tag,
       properties: [],
       styles: [],
@@ -39,17 +39,17 @@ function createHtmlJson(tag: string) {
 function htmlJsonToString(elmJson: HtmlJson) {
   try {
     let childrenStr = "";
-    for (let child of elmJson.children) {
+    for (const child of elmJson.children) {
       childrenStr += htmlJsonToString(child);
     }
 
     let propertiesStr = "";
-    for (let property of elmJson.properties) {
+    for (const property of elmJson.properties) {
       propertiesStr += property + " ";
     }
 
     let styles = "";
-    for (let style of elmJson.styles) {
+    for (const style of elmJson.styles) {
       styles += " " + style + ";";
     }
 

@@ -21,7 +21,7 @@ app.all("/*", (req, res) => {
   return res.status(200).sendFile(join(clientDir, "/dist/index.html"));
 });
 // error handling - 2
-app.use((req, res, next) => {
+app.use((req, res) => {
   return res
     .status(500)
     .send({ message: "Issue happened. Please retry later!" });

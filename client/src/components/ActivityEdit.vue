@@ -156,7 +156,7 @@
                 class="row mt-2 py-2"
               >
                 <div class="col">
-                  <label>Start Datetime:</label>
+                  <label>Start DateTime:</label>
                   <div class="form-control">
                     <input
                       type="date"
@@ -183,7 +183,7 @@
                   </div>
                 </div>
                 <div class="col">
-                  <label>End Datetime:</label>
+                  <label>End DateTime:</label>
                   <div class="form-control">
                     <input
                       type="date"
@@ -508,15 +508,15 @@ function initData() {
   }
   // console.log('init data.curActivity:', data.curActivity)
 
-  if (props.activity.startDatetime) {
+  if (props.activity.startDateTime) {
     data.startDateStr = dateToLocaleStr(
-      new Date(props.activity.startDatetime)
+      new Date(props.activity.startDateTime)
     ).split("T")[0];
-    data.startHour = new Date(props.activity.startDatetime)
+    data.startHour = new Date(props.activity.startDateTime)
       .getHours()
       .toString()
       .padStart(2, "0");
-    data.startMinute = new Date(props.activity.startDatetime)
+    data.startMinute = new Date(props.activity.startDateTime)
       .getMinutes()
       .toString()
       .padStart(2, "0");
@@ -529,15 +529,15 @@ function initData() {
     data.startMinute = "00";
   }
 
-  if (props.activity.endDatetime) {
+  if (props.activity.endDateTime) {
     data.endDateStr = dateToLocaleStr(
-      new Date(props.activity.endDatetime)
+      new Date(props.activity.endDateTime)
     ).split("T")[0];
-    data.endHour = new Date(props.activity.endDatetime)
+    data.endHour = new Date(props.activity.endDateTime)
       .getHours()
       .toString()
       .padStart(2, "0");
-    data.endMinute = new Date(props.activity.endDatetime)
+    data.endMinute = new Date(props.activity.endDateTime)
       .getMinutes()
       .toString()
       .padStart(2, "0");
@@ -562,17 +562,14 @@ function Submit() {
   data.submitMsg = "";
 
   // SG locale datetime
-  let startDatetime = new Date(data.startDateStr);
-  startDatetime.setHours(parseInt(data.startHour));
-  startDatetime.setMinutes(parseInt(data.startMinute));
-  data.curActivity.startDatetime = startDatetime;
-  let endDatetime = new Date(data.endDateStr);
-  endDatetime.setHours(parseInt(data.endHour));
-  endDatetime.setMinutes(parseInt(data.endMinute));
-  data.curActivity.endDatetime = endDatetime;
-  // console.log("endDatetime:", endDatetime);
-
-  // console.log("submit act:", data.curActivity);
+  let startDateTime = new Date(data.startDateStr);
+  startDateTime.setHours(parseInt(data.startHour));
+  startDateTime.setMinutes(parseInt(data.startMinute));
+  data.curActivity.startDateTime = startDateTime;
+  let endDateTime = new Date(data.endDateStr);
+  endDateTime.setHours(parseInt(data.endHour));
+  endDateTime.setMinutes(parseInt(data.endMinute));
+  data.curActivity.endDateTime = endDateTime;
 
   disableSubmit.value = true;
   // for existing Act with ID, to update using PUT

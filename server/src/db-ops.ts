@@ -1,13 +1,15 @@
 import { join } from "path";
 import { serverDir } from "./dir";
-const Database = require("better-sqlite3");
+// yc debug
+// const Database = require("better-sqlite3");
+import * as Database from 'better-sqlite3'
 
 interface Activity {
   title?: string;
   status?: string;
   affectedSystems?: string;
-  startDatetime?: string;
-  endDatetime?: string;
+  startDateTime?: string;
+  endDateTime?: string;
   impact?: string;
   noImpact?: string;
   stakeholders?: string;
@@ -15,20 +17,20 @@ interface Activity {
   riskAndMitigation?: string;
   remarks?: string;
   contactPersons?: string;
-  createDatetime?: string;
-  updateDatetime?: string;
+  createDateTime?: string;
+  updateDateTime?: string;
 }
 
 const dbFile = join(serverDir, "/msi.sqlite3");
 try {
-  let db = Database(dbFile);
+  const db = Database(dbFile);
   // Activities Table
   db.exec(
     `CREATE TABLE IF NOT EXISTS Activities(id	TEXT NOT NULL primary key, 
       title	TEXT, 
       affectedSystems	TEXT, 
-      startDatetime	TEXT, 
-      endDatetime	TEXT, 
+      startDateTime	TEXT, 
+      endDateTime	TEXT, 
       impact	TEXT, 
       noImpact	TEXT, 
       stakeholders	TEXT, 
@@ -37,8 +39,8 @@ try {
       remarks	TEXT, 
       contactPersons	TEXT,
       status	TEXT, 
-      createDatetime TEXT,
-      updateDatetime TEXT,
+      createDateTime TEXT,
+      updateDateTime TEXT,
       type TEXT
     );`
   );
@@ -51,7 +53,7 @@ try {
       updated TEXT
     );`
   );
-  // Usres Table
+  // Users Table
   db.exec(
     `CREATE TABLE IF NOT EXISTS Users(id	TEXT NOT NULL primary key, 
       pwd	TEXT,
@@ -93,14 +95,13 @@ try {
       primary key ("email", "group")
     );`
   );
-  // console.log(rslt);
   db.close();
 } catch (e) {
   console.log(e);
 }
 
 function dbOpen() {
-  let db = Database(dbFile);
+  const db = Database(dbFile);
   return db;
 }
 

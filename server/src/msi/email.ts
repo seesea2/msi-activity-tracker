@@ -1,10 +1,7 @@
-// import * as nodemailer from "nodemailer";
 import * as nodemailer from "nodemailer";
-import { writeFileSync } from "fs";
+// import { writeFileSync } from "fs";
 
-const cfg = require("../cfg.js");
-
-import { HtmlJson, createHtmlJson, htmlJsonToString } from "./html-json";
+import { createHtmlJson, htmlJsonToString } from "./html-json";
 
 const kHtmlHeader =
   "<head>" +
@@ -14,13 +11,13 @@ const kHtmlHeader =
   "</head>";
 
 const outlook = {
-  host: cfg.email.host,
+  host: "smtp-mail.outlook.com",
   secureConnection: false,
   requireTLS: true,
   port: 587,
   auth: {
-    user: cfg.email.user,
-    pass: cfg.email.pass,
+    user: "a@b.com",
+    pass: "abcdefg",
   },
   debug: false,
   logger: false,
@@ -28,27 +25,23 @@ const outlook = {
 
 async function emailActivity(data: any) {
   try {
-    let html = buildHtml(data.activity);
+    const html = buildHtml(data.activity);
     // writeFileSync("./testHtmlStr.html", html);
     // console.log("buildHtml data:", data);
     // console.log("buildHtml:", html);
     // return;
 
     // let smtpTransport = nodemailer.createTransport(msiGlobal);
-    let smtpTransport = nodemailer.createTransport(outlook);
-    let info = await smtpTransport.sendMail({
-      from: cfg.email.user,
+    const smtpTransport = nodemailer.createTransport(outlook);
+    const info = await smtpTransport.sendMail({
+      from: "a@b.com",
       to: data.emails.toString(),
       subject: "MSI Activity Notification", // Subject line
       text: "MSI Activity Notification.", // plain text content
       html: html, // html content
     });
 
-    // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-    // console.log("info", info);
-    // return info.envelope;
-    let ret = { msg: "Accepted: " + info.accepted.toString() };
-    // console.log(ret);
+    const ret = { msg: "Accepted: " + info.accepted.toString() };
     return ret;
   } catch (e) {
     console.log(e);
@@ -57,7 +50,7 @@ async function emailActivity(data: any) {
 }
 
 function buildJsonForActivity(activity: any) {
-  let tableJson = createHtmlJson("table");
+  const tableJson = createHtmlJson("table");
   try {
     tableJson.styles.push(
       "width: 100%;border-collapse: collapse;border-style:solid"
@@ -66,10 +59,10 @@ function buildJsonForActivity(activity: any) {
 
     const styleStr =
       "border: 1px solid;margin: 2px 2px 2px 2px; padding:2px 2px 2px 2px";
-    let elmThead = createHtmlJson("thead");
+    const elmThead = createHtmlJson("thead");
     elmThead.styles.push(styleStr);
     tableJson.children.push(elmThead);
-    let elmTheadTr = createHtmlJson("tr");
+    const elmTheadTr = createHtmlJson("tr");
     elmTheadTr.styles.push(styleStr);
     elmThead.children.push(elmTheadTr);
     let elmTheadTrTh = createHtmlJson("th");
@@ -81,12 +74,12 @@ function buildJsonForActivity(activity: any) {
     elmTheadTrTh.innerText = "Description";
     elmTheadTrTh.styles.push(styleStr);
 
-    let elmTbody = createHtmlJson("tbody");
+    const elmTbody = createHtmlJson("tbody");
     tableJson.children.push(elmTbody);
     elmTbody.styles.push(styleStr);
 
     if (activity["title"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -99,8 +92,8 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.styles.push(styleStr);
       elmTbodyTrTd.innerText = activity["title"];
     }
-    if (activity["startDatetime"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+    if (activity["startDateTime"]) {
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -111,16 +104,16 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd = createHtmlJson("td");
       elmTbodyTr.children.push(elmTbodyTrTd);
       elmTbodyTrTd.innerText = new Date(
-        activity["startDatetime"]
+        activity["startDateTime"]
       ).toLocaleString();
       elmTbodyTrTd.innerText += " - ";
       elmTbodyTrTd.innerText += new Date(
-        activity["endDatetime"]
+        activity["endDateTime"]
       ).toLocaleString();
       elmTbodyTrTd.styles.push(styleStr);
     }
     if (activity["affectedSystems"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -134,7 +127,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.styles.push(styleStr);
     }
     if (activity["impact"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -148,7 +141,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["impact"];
     }
     if (activity["noImpact"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -162,7 +155,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["noImpact"];
     }
     if (activity["stakeholders"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -176,7 +169,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["stakeholders"];
     }
     if (activity["teams"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -190,7 +183,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["teams"];
     }
     if (activity["contactPersons"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -204,7 +197,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["contactPersons"];
     }
     if (activity["riskAndMitigation"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -218,7 +211,7 @@ function buildJsonForActivity(activity: any) {
       elmTbodyTrTd.innerText = activity["riskAndMitigation"];
     }
     if (activity["remarks"]) {
-      let elmTbodyTr = createHtmlJson("tr");
+      const elmTbodyTr = createHtmlJson("tr");
       elmTbodyTr.styles.push(styleStr);
       elmTbody.children.push(elmTbodyTr);
       let elmTbodyTrTd = createHtmlJson("td");
@@ -239,7 +232,7 @@ function buildJsonForActivity(activity: any) {
 }
 
 function buildHtml(activity: any): string {
-  let bodyJson = createHtmlJson("body");
+  const bodyJson = createHtmlJson("body");
 
   try {
     let elm = createHtmlJson("b");
@@ -259,7 +252,7 @@ function buildHtml(activity: any): string {
     bodyJson.children.push(elm);
 
     // activity details
-    let activityJson = buildJsonForActivity(activity);
+    const activityJson = buildJsonForActivity(activity);
     bodyJson.children.push(activityJson);
 
     // email farewell
@@ -275,7 +268,7 @@ function buildHtml(activity: any): string {
   } catch (e) {
     console.log(e);
   }
-  let html = "<html>" + kHtmlHeader + htmlJsonToString(bodyJson) + "</html>";
+  const html = "<html>" + kHtmlHeader + htmlJsonToString(bodyJson) + "</html>";
   return html;
 }
 

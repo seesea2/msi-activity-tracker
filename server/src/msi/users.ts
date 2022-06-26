@@ -12,8 +12,10 @@ const dbUserColumns = [
   "status",
 ];
 
-let allLoginUsers: any = [];
+// eslint-disable-next-line
+const allLoginUsers: any = [];
 
+// eslint-disable-next-line
 function InsertUser(data: any) {
   // console.log("InsertUser", data);
   if (!data || !data.id || !data.pwd) {
@@ -23,26 +25,26 @@ function InsertUser(data: any) {
   try {
     let fields = "created";
     let values = `'${new Date().toISOString()}'`;
-    for (let val of dbUserColumns) {
+    for (const val of dbUserColumns) {
       if (data[val]) {
         data[val] = data[val].replace(/'/g, "''");
         fields += `,"${val}"`;
         if (val != "pwd") {
           values += `,'${data[val]}'`;
         } else {
-          let pwdHash = createHash("sha1").update(data[val]).digest("hex");
+          const pwdHash = createHash("sha1").update(data[val]).digest("hex");
           values += `,'${pwdHash}'`;
         }
       }
     }
 
-    let sql = `insert into "Users"(${fields}) values(${values});`;
+    const sql = `insert into "Users"(${fields}) values(${values});`;
     // console.log("sql: ", sql);
-    let db = dbOpen();
-    let stmt = db.prepare(sql);
-    let rslt = stmt.run();
+    const db = dbOpen();
+    const stmt = db.prepare(sql);
+    const ret = stmt.run();
     db.close();
-    if (rslt && rslt.changes) {
+    if (ret && ret.changes) {
       return { msg: "Done" };
     }
     return { err: "Create user failed." };
@@ -52,21 +54,21 @@ function InsertUser(data: any) {
   }
 }
 
+// eslint-disable-next-line
 function ChangePwd(data: any) {
   if (!data || !data.oldPwd || !data.newPwd) return false;
 
   try {
-    let oldPwdHash = createHash("sha1").update(data.oldPwd).digest("hex");
-    let newPwdHash = createHash("sha1").update(data.newPwd).digest("hex");
+    const oldPwdHash = createHash("sha1").update(data.oldPwd).digest("hex");
+    const newPwdHash = createHash("sha1").update(data.newPwd).digest("hex");
 
-    let sql = `update "Users" set "pwd"='${newPwdHash}' where "id"='${data.id}' and "pwd"='${oldPwdHash}'`;
+    const sql = `update "Users" set "pwd"='${newPwdHash}' where "id"='${data.id}' and "pwd"='${oldPwdHash}'`;
 
-    let db = dbOpen();
-    let stmt = db.prepare(sql);
-    let rslt = stmt.run();
-    // console.log(rslt);
+    const db = dbOpen();
+    const stmt = db.prepare(sql);
+    const ret = stmt.run();
     db.close();
-    if (rslt && rslt.changes) {
+    if (ret && ret.changes) {
       return { msg: "Done" };
     }
     return { err: "No record is changed." };
@@ -77,8 +79,8 @@ function ChangePwd(data: any) {
 }
 function DeleteUser(id: string) {
   try {
-    let db = dbOpen();
-    let stmt = db.prepare(`delete from Users where id='${id}';`);
+    const db = dbOpen();
+    const stmt = db.prepare(`delete from Users where id='${id}';`);
     stmt.run();
     db.close();
     return true;
@@ -94,19 +96,17 @@ function LoginUser(data: any) {
       return;
     }
 
-    for (let i in allLoginUsers) {
+    for (const i in allLoginUsers) {
       if (allLoginUsers[i].id == data.id) {
         return allLoginUsers[i];
       }
     }
 
-    let hash = createHash("sha1").update(data.pwd).digest("hex");
-    let sql = `select * from Users where id='${data.id}' and pwd='${hash}';`;
-    // console.log(sql);
-    let db = dbOpen();
-    let stmt = db.prepare(sql);
-    let record = stmt.get();
-    // console.log("login record: ", record);
+    const hash = createHash("sha1").update(data.pwd).digest("hex");
+    const sql = `select * from Users where id='${data.id}' and pwd='${hash}';`;
+    const db = dbOpen();
+    const stmt = db.prepare(sql);
+    const record = stmt.get();
     db.close();
     if (record) {
       allLoginUsers.push(record);
@@ -122,8 +122,7 @@ function LoginUser(data: any) {
 
 function LogoutUser(data: any) {
   try {
-    // console.log(allLoginUsers);
-    for (let i in allLoginUsers) {
+    for (const i in allLoginUsers) {
       if (allLoginUsers[i].id == data.id) {
         allLoginUsers.splice(i, 1);
         return true;
@@ -137,10 +136,9 @@ function LogoutUser(data: any) {
 
 function AllUsers() {
   try {
-    let db = dbOpen();
-    let stmt = db.prepare(`select * from Users;`);
-    let items = stmt.all();
-    // console.log(item);
+    const db = dbOpen();
+    const stmt = db.prepare(`select * from Users;`);
+    const items = stmt.all();
     db.close();
     return items;
   } catch (e) {
@@ -148,8 +146,8 @@ function AllUsers() {
   }
 }
 
-// liych for initial user
-let user = {
+// for initial user
+const user = {
   id: "test",
   pwd: "test",
 };

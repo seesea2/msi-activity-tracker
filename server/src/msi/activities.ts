@@ -1,13 +1,13 @@
 import { randomUUID } from "crypto";
-import { Activity, dbOpen } from "../db-ops";
+import { dbOpen } from "../db-ops";
 import { emailActivity as sendEmail } from "./email";
 
 const dbActivitiesColumns = [
   "title",
   "status",
   "affectedSystems",
-  "startDatetime",
-  "endDatetime",
+  "startDateTime",
+  "endDateTime",
   "impact",
   "noImpact",
   "stakeholders",
@@ -15,8 +15,8 @@ const dbActivitiesColumns = [
   "riskAndMitigation",
   "remarks",
   "contactPersons",
-  "createDatetime",
-  "updateDatetime",
+  "createDateTime",
+  "updateDateTime",
   "type", // Activity, Issue, Template
 ];
 
@@ -27,11 +27,11 @@ function InsertActivity(data: any) {
 
   try {
     let fields = `"id"`;
-    let id = randomUUID();
+    const id = randomUUID();
     let values = "'" + id + "'";
 
-    for (let val of dbActivitiesColumns) {
-      if (["createDatetime", "updateDatetime"].includes(val)) {
+    for (const val of dbActivitiesColumns) {
+      if (["createDateTime", "updateDateTime"].includes(val)) {
         continue;
       }
       if (data[val]) {
@@ -42,7 +42,7 @@ function InsertActivity(data: any) {
       }
     }
 
-    fields += `,"createDatetime"`;
+    fields += `,"createDateTime"`;
     values += ",'" + new Date().toISOString() + "'";
     // console.log(fields.length, fields);
     // console.log(values.length, values);
@@ -84,8 +84,8 @@ function UpdateActivity(data: any) {
   try {
     // for Activities table
     let sql = `update "Activities" set `;
-    for (let val of dbActivitiesColumns) {
-      if (val == "updateDatetime") {
+    for (const val of dbActivitiesColumns) {
+      if (val == "updateDateTime") {
         continue;
       }
       if (data[val]) {
@@ -94,18 +94,18 @@ function UpdateActivity(data: any) {
         sql += `"${val}"='${data[val]}',`;
       }
     }
-    sql += `"updateDatetime"='${new Date().toISOString()}' `;
+    sql += `"updateDateTime"='${new Date().toISOString()}' `;
     sql += `where "id"='${data.id}';`;
     console.log("sql: ", sql);
-    let db = dbOpen();
-    let stmt = db.prepare(sql);
+    const db = dbOpen();
+    const stmt = db.prepare(sql);
     stmt.run();
     db.close();
 
     // for Templates table
     if (data["type"] == "Template") {
       let sql = `update "Templates" set `;
-      for (let val of dbTemplatesColumns) {
+      for (const val of dbTemplatesColumns) {
         if (["id", "updated"].includes(val)) {
           continue;
         }
@@ -118,8 +118,8 @@ function UpdateActivity(data: any) {
       sql += `"updated"='${new Date().toISOString()}' `;
       sql += `where "id"='${data.id}';`;
       console.log("update template sql: ", sql);
-      let db = dbOpen();
-      let stmt = db.prepare(sql);
+      const db = dbOpen();
+      const stmt = db.prepare(sql);
       stmt.run();
       db.close();
     }
@@ -132,7 +132,7 @@ function UpdateActivity(data: any) {
 
 function DeleteActivity(id: string) {
   try {
-    let db = dbOpen();
+    const db = dbOpen();
     let stmt = db.prepare(`delete from Activities where id='${id}';`);
     stmt.run();
     stmt = db.prepare(`delete from Templates where id='${id}';`);
@@ -147,9 +147,9 @@ function DeleteActivity(id: string) {
 
 function SelectActivity(id: string) {
   try {
-    let db = dbOpen();
-    let stmt = db.prepare(`select * from Activities where id='${id}';`);
-    let record = stmt.get();
+    const db = dbOpen();
+    const stmt = db.prepare(`select * from Activities where id='${id}';`);
+    const record = stmt.get();
     db.close();
     return record;
   } catch (e) {
@@ -160,11 +160,11 @@ function SelectActivity(id: string) {
 
 function AllActivity() {
   try {
-    let db = dbOpen();
-    let stmt = db.prepare(
-      `select * from Activities where id not in (select id from Templates) order by "startDatetime" desc;`
+    const db = dbOpen();
+    const stmt = db.prepare(
+      `select * from Activities where id not in (select id from Templates) order by "startDateTime" desc;`
     );
-    let items = stmt.all();
+    const items = stmt.all();
     // console.log(items);
     // console.log(typeof items);
     db.close();
@@ -175,13 +175,11 @@ function AllActivity() {
 }
 function ActivityTemplates() {
   try {
-    let db = dbOpen();
-    let stmt = db.prepare(
+    const db = dbOpen();
+    const stmt = db.prepare(
       `select a.*,t.group1,t.group2 from Activities a, Templates t where a.id=t.id order by "group1","group2";`
     );
-    let items = stmt.all();
-    // console.log(items);
-    // console.log(typeof items);
+    const items = stmt.all();
     db.close();
     return items;
   } catch (e) {
@@ -190,21 +188,20 @@ function ActivityTemplates() {
 }
 
 async function emailActivity(data: any) {
-  let ret = await sendEmail(data);
-  // console.log("ret:", ret);
+  const ret = await sendEmail(data);
   return ret;
 }
 
 // yc for testing
-let startDate = new Date();
+const startDate = new Date();
 startDate.setDate(new Date().getDate() - 5);
 for (let i = 0; i < 10; ++i) {
-  let act1: any = {};
-  for (let val of dbActivitiesColumns) {
+  const act1: any = {};
+  for (const val of dbActivitiesColumns) {
     act1[val] = "act" + i;
   }
-  act1.startDatetime = startDate.toISOString();
-  act1.endDatetime = startDate.toISOString();
+  act1.startDateTime = startDate.toISOString();
+  act1.endDateTime = startDate.toISOString();
   startDate.setDate(startDate.getDate() + 1);
   // InsertActivity(act1);
 }

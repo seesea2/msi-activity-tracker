@@ -2,7 +2,7 @@
   <msi-navbar></msi-navbar>
 
   <div class="container">
-    <h4 class="my-4">Ordered by StartDatetime Decreasing</h4>
+    <h4 class="my-4">Ordered by StartDateTime Decreasing</h4>
 
     Filter:
     <div class="form-check form-check-inline">
@@ -58,8 +58,8 @@
               &#9956; {{ ind + 1 }}
             </td>
             <td>{{ activity.title }}</td>
-            <td>{{ new Date(activity.startDatetime).toLocaleString() }}</td>
-            <td>{{ new Date(activity.endDatetime).toLocaleString() }}</td>
+            <td>{{ new Date(activity.startDateTime).toLocaleString() }}</td>
+            <td>{{ new Date(activity.endDateTime).toLocaleString() }}</td>
             <td v-html="activity.affectedSystems"></td>
           </tr>
         </template>
@@ -129,7 +129,7 @@ function catchEdit(newAct) {
     }
     data.activities.push(newCopy);
     data.activities.sort(function (a, b) {
-      return new Date(b.startDatetime) - new Date(a.startDatetime);
+      return new Date(b.startDateTime) - new Date(a.startDateTime);
     });
   }
   // console.log("log catchEdit data.activities:", data.activities);
@@ -143,7 +143,7 @@ function Refresh() {
         data.activities.push(item);
       }
       data.activities.sort(function (a, b) {
-        return new Date(b.startDatetime) - new Date(a.startDatetime);
+        return new Date(b.startDateTime) - new Date(a.startDateTime);
       });
     })
     .catch((err) => {

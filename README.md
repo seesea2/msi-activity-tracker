@@ -41,5 +41,5 @@ npm run build
 ### send email feature
 
 ```
-need to configure smtp info in file: ./server/src/cfg.js
+need to configure smtp info in file: ./server/src/msi/email.ts
 ```
