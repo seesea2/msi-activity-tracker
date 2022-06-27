@@ -16,7 +16,8 @@
     "sourceMap": false,
     "target": "es6",
     "types": [
-      "node"
+      "node",
+      "jest"
     ]
   },
   "include": [
@@ -24,7 +25,7 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
   ],
   "typescript.format.enable": true
 }

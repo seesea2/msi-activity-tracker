@@ -56,7 +56,9 @@ function InsertUser(data: any) {
 
 // eslint-disable-next-line
 function ChangePwd(data: any) {
-  if (!data || !data.oldPwd || !data.newPwd) return false;
+  if (!data || !data.oldPwd || !data.newPwd) {
+    return { err: 'Invalid inputs.' };
+  }
 
   try {
     const oldPwdHash = createHash("sha1").update(data.oldPwd).digest("hex");
@@ -68,6 +70,7 @@ function ChangePwd(data: any) {
     const stmt = db.prepare(sql);
     const ret = stmt.run();
     db.close();
+    console.log("ret", ret)
     if (ret && ret.changes) {
       return { msg: "Done" };
     }
@@ -77,6 +80,7 @@ function ChangePwd(data: any) {
     return { err: e };
   }
 }
+
 function DeleteUser(id: string) {
   try {
     const db = dbOpen();
